@@ -1,17 +1,32 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import Navbar from './components/Navbar.vue';
-import Footer from './components/Footer.vue';
+import { ref, watch } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
+import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
+
+const route = useRoute()
+const navigationDisabled = ref(false)
+const noNavRoutes = ['sign-in', 'sign-up']
+
+function checkRoutes(): void {
+  const routeName = route?.name
+  if (!routeName) return
+
+  if (noNavRoutes.includes(routeName.toString())) {
+    navigationDisabled.value = true
+  }
+}
+checkRoutes()
+
+watch(route, checkRoutes)
 </script>
 
 <template>
-  <Navbar />
+  <Navbar v-if="!navigationDisabled" />
 
   <RouterView />
 
-  <Footer />
+  <Footer v-if="!navigationDisabled" />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

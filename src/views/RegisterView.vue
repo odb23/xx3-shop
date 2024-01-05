@@ -1,17 +1,28 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
   <main class="bg-white w-full h-screen relative overflow-hidden">
     <div class="flex flex-col gap-4 items-center justify-center h-full max-w-[400px] mx-auto">
       <div class="space-y-2">
-        <h3 class="text-black text-center text-3xl font-bold">ogShop - Sign in</h3>
-        <!-- <p class="text-black text-center font-italic font-medium">
+        <h3 class="text-black text-center text-3xl font-bold">ogShop - Sign up</h3>
+        <p class="text-black text-center font-italic font-medium">
           Fill in your information in the form below to create an account.
-        </p> -->
+        </p>
       </div>
       <form className="w-full space-y-4">
+        <div class="w-full flex flex-col gap-2 items-start justify-start">
+          <label for="name" class="text-black text-left"> Your Full Name* </label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Dammy ODB"
+            class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
+          />
+        </div>
+
         <div class="w-full flex flex-col gap-2 items-start justify-start">
           <label for="email" class="text-black text-left"> Your Email Address* </label>
           <input
@@ -33,14 +44,23 @@ import { RouterLink } from 'vue-router';
             class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
           />
         </div>
-       
+        <div class="w-full flex flex-col gap-2 items-start justify-start">
+          <label for="password" class="text-black text-left"> Confirm Password* </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="**************"
+            class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
+          />
+        </div>
 
         <div class="flex flex-col gap-4 items-start justify-start mt-2">
           <button
             type="submit"
             class="bg-black text-white py-3 w-full flex flex-row gap-2 items-center justify-center"
           >
-            Sign In
+            Sign Up
           </button>
           <div
             class="border-solid border-black border py-3 w-full flex flex-row gap-3 items-center justify-center"
@@ -60,13 +80,13 @@ import { RouterLink } from 'vue-router';
               />
             </svg>
 
-            Sign In with Google
+            Sign Up with Google
           </div>
         </div>
       </form>
       <div class="flex flex-row gap-[5px] items-center justify-start shrink-0 relative">
-        <span> Don't have an account? </span>
-        <RouterLink to="sign-up" class="underline"> Sign up </RouterLink >
+        <span> Already have an account? </span>
+        <RouterLink to="sign-in" class="underline"> Log In </RouterLink>
       </div>
     </div>
   </main>
