@@ -1,23 +1,65 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+import { createUseAccountWithEmailAndPassword, signInWithUserGoogleAccount } from '@/services/auth'
+
+const router = useRouter()
+const fullName = ref('')
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+
+function handleSignUp() {
+  if (!fullName.value.trim() || !email.value.trim() || !password.value || !confirmPassword.value) {
+    // TODO: alert - one or more input field(s) are empty
+    return
+  }
+
+  if (password.value !== confirmPassword.value) {
+    // TODO: alert - password is not the same as confirm password
+    return
+  }
+
+  createUseAccountWithEmailAndPassword(email.value, password.value, fullName.value)
+    .then((user) => {
+      console.log(user)
+      router.push({name: 'home'})
+    })
+    .catch((error) => {
+      // handle error
+      console.log(error)
+    })
+}
+
+function handleLoginWithGoogle() {
+  signInWithUserGoogleAccount()
+    .then((user) => {
+      console.log(user)
+      router.push('home')
+    })
+    .catch((e) => console.log(e))
+}
 </script>
 
 <template>
   <main class="bg-white w-full h-screen relative overflow-hidden">
-    <div class="flex flex-col gap-4 items-center justify-center h-full max-w-[400px] mx-auto">
+    <div class="flex flex-col gap-4 items-center justify-center h-full p-3.5 max-w-[400px] mx-auto">
       <div class="space-y-2">
-        <h3 class="text-black text-center text-3xl font-bold">ogShop - Sign up</h3>
+        <h3 class="text-black text-center text-xl md:text-2xl lg:text-3xl font-bold">ogShop - Sign up</h3>
         <p class="text-black text-center font-italic font-medium">
           Fill in your information in the form below to create an account.
         </p>
       </div>
-      <form className="w-full space-y-4">
+      <form @submit.prevent="handleSignUp" className="w-full space-y-4">
         <div class="w-full flex flex-col gap-2 items-start justify-start">
           <label for="name" class="text-black text-left"> Your Full Name* </label>
           <input
             type="text"
             name="name"
             id="name"
+            required
+            v-model="fullName"
+            maxlength="30"
             placeholder="Dammy ODB"
             class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
           />
@@ -28,6 +70,8 @@ import { RouterLink } from 'vue-router'
           <input
             type="email"
             name="email"
+            required
+            v-model="email"
             id="email"
             placeholder="odb23@dammy.com"
             class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
@@ -39,17 +83,21 @@ import { RouterLink } from 'vue-router'
           <input
             type="password"
             name="password"
+            required
+            v-model="password"
             id="password"
             placeholder="**************"
             class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
           />
         </div>
         <div class="w-full flex flex-col gap-2 items-start justify-start">
-          <label for="password" class="text-black text-left"> Confirm Password* </label>
+          <label for="confirmPassword" class="text-black text-left"> Confirm Password* </label>
           <input
             type="password"
-            name="password"
-            id="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            v-model="confirmPassword"
+            required
             placeholder="**************"
             class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
           />
@@ -58,12 +106,15 @@ import { RouterLink } from 'vue-router'
         <div class="flex flex-col gap-4 items-start justify-start mt-2">
           <button
             type="submit"
-            class="bg-black text-white py-3 w-full flex flex-row gap-2 items-center justify-center"
+            class="bg-black text-white py-3 w-full flex flex-row gap-2 items-center justify-center rounded-md"
           >
             Sign Up
           </button>
-          <div
-            class="border-solid border-black border py-3 w-full flex flex-row gap-3 items-center justify-center"
+          <p class="text-center w-full">Or</p>
+          <button
+            type="button"
+            @click.prevent="handleLoginWithGoogle"
+            class="border-solid border-black border py-3 w-full flex flex-row gap-3 items-center justify-center rounded-md"
           >
             <svg
               class="shrink-0 w-6 h-6 relative overflow-visible"
@@ -80,8 +131,8 @@ import { RouterLink } from 'vue-router'
               />
             </svg>
 
-            Sign Up with Google
-          </div>
+            Sign In with Google
+          </button>
         </div>
       </form>
       <div class="flex flex-row gap-[5px] items-center justify-start shrink-0 relative">

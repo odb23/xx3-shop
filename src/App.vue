@@ -12,9 +12,7 @@ function checkRoutes(): void {
   const routeName = route?.name
   if (!routeName) return
 
-  if (noNavRoutes.includes(routeName.toString())) {
-    navigationDisabled.value = true
-  }
+  navigationDisabled.value = noNavRoutes.includes(routeName.toString())
 }
 checkRoutes()
 
