@@ -2,22 +2,26 @@
 import { RouterLink, useRouter } from 'vue-router'
 import { signInWithUserEmailAndPassword, signInWithUserGoogleAccount } from '@/services/auth'
 import { ref } from 'vue'
+import { useUserStore } from '@/store/index.ts'
+
+const store = useUserStore()
+
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
 
 function handleLoginWithEmailAndPassword() {
-  if (!email.value.trim() || !password.value) {
+  const trimmedEmail = email.value.trim()
+  if (trimmedEmail || !password.value) {
     // TODO: add error message alert
     return
   }
 
-  signInWithUserEmailAndPassword(email.value, password.value)
+  signInWithUserEmailAndPassword(trimmedEmail, password.value)
     .then((user) => {
-      // set user in store
-      console.log(user)
-      router.push({name: "home"})
+      store.user = user
+      router.push({ name: 'home' })
     })
     .catch(() => {
       // display error message - alert
@@ -27,8 +31,8 @@ function handleLoginWithEmailAndPassword() {
 function handleLoginWithGoogle() {
   signInWithUserGoogleAccount()
     .then((user) => {
-      console.log(user)
-      router.push("home")
+      store.user = user
+      router.push({ name: 'home' })
     })
     .catch((e) => console.log(e))
 }
@@ -38,7 +42,9 @@ function handleLoginWithGoogle() {
   <main class="bg-white w-full h-screen relative overflow-hidden">
     <div class="flex flex-col gap-4 items-center justify-center h-full max-w-[400px] p-3.5 mx-auto">
       <div class="space-y-2">
-        <h3 class="text-black text-center text-xl md:text-2xl lg:text-3xl font-bold">ogShop23 - Sign in</h3>
+        <h3 class="text-black text-center text-xl md:text-2xl lg:text-3xl font-bold">
+          ogShop23 - Sign in
+        </h3>
         <!-- <p class="text-black text-center font-italic font-medium">
           Fill in your information in the form below to create an account.
         </p> -->

@@ -2,7 +2,9 @@
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { createUseAccountWithEmailAndPassword, signInWithUserGoogleAccount } from '@/services/auth'
+const { useUserStore} = "@/store/index"
 
+const store = useUserStore()
 const router = useRouter()
 const fullName = ref('')
 const email = ref('')
@@ -10,7 +12,10 @@ const password = ref('')
 const confirmPassword = ref('')
 
 function handleSignUp() {
-  if (!fullName.value.trim() || !email.value.trim() || !password.value || !confirmPassword.value) {
+  const trimmedFN = fullName.value?.trim()
+  const trimmedEmail = email.value?.trim()
+
+  if (!trimmedEmail || !trimmed || !password.value || !confirmPassword.value) {
     // TODO: alert - one or more input field(s) are empty
     return
   }
@@ -20,10 +25,10 @@ function handleSignUp() {
     return
   }
 
-  createUseAccountWithEmailAndPassword(email.value, password.value, fullName.value)
+  createUseAccountWithEmailAndPassword(trimmedEmail, trimmedFN, fullName.value)
     .then((user) => {
-      console.log(user)
-      router.push({name: 'home'})
+      store.user = user
+      router.push({ name: 'home' })
     })
     .catch((error) => {
       // handle error
@@ -34,8 +39,8 @@ function handleSignUp() {
 function handleLoginWithGoogle() {
   signInWithUserGoogleAccount()
     .then((user) => {
-      console.log(user)
-      router.push('home')
+      store.user = user
+      router.push({ name: 'home' })
     })
     .catch((e) => console.log(e))
 }
@@ -45,7 +50,9 @@ function handleLoginWithGoogle() {
   <main class="bg-white w-full h-screen relative overflow-hidden">
     <div class="flex flex-col gap-4 items-center justify-center h-full p-3.5 max-w-[400px] mx-auto">
       <div class="space-y-2">
-        <h3 class="text-black text-center text-xl md:text-2xl lg:text-3xl font-bold">ogShop - Sign up</h3>
+        <h3 class="text-black text-center text-xl md:text-2xl lg:text-3xl font-bold">
+          ogShop - Sign up
+        </h3>
         <p class="text-black text-center font-italic font-medium">
           Fill in your information in the form below to create an account.
         </p>
@@ -60,7 +67,7 @@ function handleLoginWithGoogle() {
             required
             v-model="fullName"
             maxlength="30"
-            placeholder="Dammy ODB"
+            placeholder="Dammy Dammy"
             class="bg-gray-200 border-gray-800 border p-2.5 w-full focus:outline-none rounded-md"
           />
         </div>

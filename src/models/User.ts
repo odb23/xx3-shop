@@ -5,6 +5,7 @@ export class User implements IUser {
   displayName: string | null
   email: string | null
   photoURL: string | null
+  
 
   constructor(
     uid: string,

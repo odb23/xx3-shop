@@ -5,7 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  updateProfile
+  updateProfile,
+  signOut
 } from 'firebase/auth'
 
 export async function signInWithUserEmailAndPassword(
@@ -50,7 +51,6 @@ export async function createUseAccountWithEmailAndPassword(
     if (!userCred) return null
 
     const { email, uid, photoURL, displayName } = userCred.user
-    console.log("From Auth Create", { email, uid, photoURL, displayName })
     if (!displayName) {
       try {
         await updateProfile(userCred.user, {
@@ -65,4 +65,8 @@ export async function createUseAccountWithEmailAndPassword(
   } catch (error: any) {
     return new Error(error.message)
   }
+}
+
+export async function signOutUserAccount() {
+  return signOut(auth)
 }
