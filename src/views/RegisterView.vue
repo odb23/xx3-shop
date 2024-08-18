@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { createUseAccountWithEmailAndPassword, signInWithUserGoogleAccount } from '@/services/auth'
-const { useUserStore} = "@/store/index"
+import { useUserStore } from '@/store'
 
 const store = useUserStore()
 const router = useRouter()
@@ -15,7 +15,7 @@ function handleSignUp() {
   const trimmedFN = fullName.value?.trim()
   const trimmedEmail = email.value?.trim()
 
-  if (!trimmedEmail || !trimmed || !password.value || !confirmPassword.value) {
+  if (!trimmedEmail || !trimmedFN || !password.value || !confirmPassword.value) {
     // TODO: alert - one or more input field(s) are empty
     return
   }
@@ -27,6 +27,8 @@ function handleSignUp() {
 
   createUseAccountWithEmailAndPassword(trimmedEmail, trimmedFN, fullName.value)
     .then((user) => {
+      if (!user) return
+      if (user instanceof Error) return
       store.user = user
       router.push({ name: 'home' })
     })
@@ -39,7 +41,8 @@ function handleSignUp() {
 function handleLoginWithGoogle() {
   signInWithUserGoogleAccount()
     .then((user) => {
-      store.user = user
+      if (!user) return
+      if (user instanceof Error) return
       router.push({ name: 'home' })
     })
     .catch((e) => console.log(e))

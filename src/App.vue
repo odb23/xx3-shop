@@ -4,10 +4,10 @@ import { RouterView, useRoute } from 'vue-router'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import { auth } from '@/configs/firebase'
-import { useUserStore } from '@/store/index.ts'
-import { onAuthStateChanged } from 'firebase/auth'
+import { useUserStore } from '@/store/index'
+import { onAuthStateChanged, type Unsubscribe } from 'firebase/auth'
 
-let unsubscribe = null
+let unsubscribe: Unsubscribe | null = null
 onBeforeMount(() => {
   unsubscribe = onAuthStateChanged(auth, (user) => {
     if (user) {

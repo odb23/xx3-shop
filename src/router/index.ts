@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import ProductOverviewView from '@/views/ProductOverviewView.vue'
+import CheckoutView from '@/views/CheckoutView.vue'
+import OrdersView from '@/views/OrdersView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +23,21 @@ const router = createRouter({
       path: "/sign-up",
       name: "sign-up",
       component: RegisterView
+    },
+    {
+      path: "/product/product-id",
+      name: "product-overview",
+      component: ProductOverviewView
+    },
+    {
+      path: "/checkout",
+      name: "checkout",
+      component: CheckoutView
+    },
+    {
+      path: "/order-history",
+      name: "orders",
+      component: OrdersView
     }
     // {
     //   path: '/about',
@@ -30,10 +48,6 @@ const router = createRouter({
     //   component: () => import('../views/AboutView.vue')
     // }
   ]
-})
-
-router.beforeEach((to, from, next) => {
-  
 })
 
 export default router
